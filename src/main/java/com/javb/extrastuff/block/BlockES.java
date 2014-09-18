@@ -7,14 +7,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
 public class BlockES extends Block{
-
 	public BlockES(Material material) {
 		super(material);
-	}
-	
+		
+	}{
+	this.setCreativeTab(CreativeTabs.tabMisc);}
 	public BlockES() {
 		super(Material.rock);
 	}
