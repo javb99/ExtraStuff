@@ -1,6 +1,7 @@
 package com.javb.extrastuff;
 
 import com.javb.extrastuff.handler.ConfigurationHandler;
+import com.javb.extrastuff.init.ModBlock;
 import com.javb.extrastuff.init.ModItems;
 import com.javb.extrastuff.proxy.IProxy;
 import com.javb.extrastuff.reference.Reference;
@@ -30,6 +31,7 @@ public class ExtraStuff
     	FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
     	
     	ModItems.init();
+    	ModBlock.init();
     	
     	LogHelper.info("PreInit complete");
     }
