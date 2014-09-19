@@ -3,6 +3,7 @@ package com.javb.extrastuff;
 import com.javb.extrastuff.handler.ConfigurationHandler;
 import com.javb.extrastuff.init.ModBlock;
 import com.javb.extrastuff.init.ModItems;
+import com.javb.extrastuff.init.Recipes;
 import com.javb.extrastuff.proxy.IProxy;
 import com.javb.extrastuff.reference.Reference;
 import com.javb.extrastuff.utility.LogHelper;
@@ -32,6 +33,7 @@ public class ExtraStuff
     	
     	ModItems.init();
     	ModBlock.init();
+    	Recipes.init();
     	
     	LogHelper.info("PreInit complete");
     }
