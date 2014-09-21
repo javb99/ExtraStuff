@@ -11,7 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 
+import com.javb.extrastuff.block.BlockES;
 import com.javb.extrastuff.reference.Reference;
 import com.javb.extrastuff.utility.LogHelper;
 import com.javb.extrastuff.utility.NBTHelper;
@@ -22,38 +24,86 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemToolMultiSpeed extends ItemTool {
 	
 	private static final String SPEED_TAG = "speed";
+	private static final String MINED_TAG = "mined";
+	private static final String UPGRADE_TAG = "upgrade";
+	
+	private String toolClass;
 
 	protected ItemToolMultiSpeed(float damageAddition, ToolMaterial material, Set minableBlocks) {
 		super(damageAddition, material, minableBlocks);
+		if (this instanceof ItemPickaxeMultiSpeed)
+        {
+            this.toolClass = "pickaxe";
+            
+        }/**
+        else if (this instanceof ItemAxeMultiSpeed)
+        {
+            toolClass = "axe";
+        }**/
+        else if (this instanceof ItemSpadeMultiSpeed)
+        {
+            toolClass = "shovel";
+        }
+		this.setHarvestLevel(toolClass, material.getHarvestLevel());
 	}
+	
+	@Override
 	public float getDigSpeed(ItemStack itemStack, Block block, int metadata) {
 		NBTTagCompound tag = itemStack.getTagCompound();
-		if (NBTHelper.hasTag(itemStack, SPEED_TAG)) {
-			int speed = NBTHelper.getInt(itemStack, SPEED_TAG);
-			return speed;
-		}
-        //return func_150893_a(itemStack, block);
-		//LogHelper.info("called get dig speed");
-		return 100;
+		if (ForgeHooks.isToolEffective(itemStack, block, metadata)) {
+			if (NBTHelper.hasTag(itemStack, SPEED_TAG)) {
+				int speed = NBTHelper.getInt(itemStack, SPEED_TAG);
+				return speed;
+			}
+        }
+		return 1.0f;
     }
 	
+	@Override
 	public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
 		NBTHelper.setInteger(itemStack, SPEED_TAG, 4);
+		NBTHelper.setInteger(itemStack, MINED_TAG, 0);
+		NBTHelper.setInteger(itemStack, UPGRADE_TAG, 2);
 		LogHelper.info("pickaxe created");
 	}
 	
-	
-	
-	public boolean onBlockDestroyed(ItemStack itemStack, World p_150894_2_, Block p_150894_3_, int p_150894_4_, int p_150894_5_, int p_150894_6_, EntityLivingBase p_150894_7_)
+	@Override
+	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block block, int x, int y, int z, EntityLivingBase p_150894_7_)
     {
-		int curSpeed = NBTHelper.getInt(itemStack, SPEED_TAG);
+		super.onBlockDestroyed(itemStack, world, block, x, y, z, p_150894_7_);
+
+		int curMined = NBTHelper.getInt(itemStack, MINED_TAG);
+		int curUpgrade = NBTHelper.getInt(itemStack, UPGRADE_TAG);
+		if (curUpgrade <= curMined + 1) {
+			int curSpeed = NBTHelper.getInt(itemStack, SPEED_TAG);
+			NBTHelper.setInteger(itemStack, SPEED_TAG, curSpeed + 4);
+			NBTHelper.setInteger(itemStack, UPGRADE_TAG, curUpgrade * 2);
+		}
 		
-		NBTHelper.setInteger(itemStack, SPEED_TAG, curSpeed + 1);
+		if (block instanceof BlockES) {
+			NBTHelper.setInteger(itemStack, MINED_TAG, curMined + 8);
+		} else {
+			NBTHelper.setInteger(itemStack, MINED_TAG, curMined + 1);
+		}
         return false;
     }
 	
 	@SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_) {
+	@Override
+    public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean bool) {
+		super.addInformation(itemStack, player, list, bool);
+		int speed = NBTHelper.getInt(itemStack, SPEED_TAG);
+		int mined = NBTHelper.getInt(itemStack, MINED_TAG);
+		int toUpgrade = NBTHelper.getInt(itemStack, UPGRADE_TAG);
+		if (speed == 0) {
+			speed = 4;
+			NBTHelper.setInteger(itemStack, SPEED_TAG, speed);
+			NBTHelper.setInteger(itemStack, MINED_TAG, 0);
+			NBTHelper.setInteger(itemStack, UPGRADE_TAG, 2);
+		}
+		list.add("Speed: " + speed);
+		list.add("Total Mined: " + mined);
+		list.add("Till Next Upgrade: " + (toUpgrade - mined));
 		
 	}
 	
