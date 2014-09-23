@@ -21,6 +21,12 @@ public class Recipes {
 		GameRegistry.addShapedRecipe(new ItemStack(ModItems.Pickaxe_16x), "ccc", " s ", " s ", 'c', new ItemStack(ModBlock.Cobble_16x), 's', new ItemStack(Items.stick));
 		GameRegistry.addShapedRecipe(new ItemStack(ModItems.Pickaxe_32x), "ccc", " s ", " s ", 'c', new ItemStack(ModBlock.Cobble_32x), 's', new ItemStack(Items.stick));
 		GameRegistry.addShapedRecipe(new ItemStack(ModItems.Pickaxe_64x), "ccc", " s ", " s ", 'c', new ItemStack(ModBlock.Cobble_64x), 's', new ItemStack(Items.stick));
+		GameRegistry.addShapedRecipe(new ItemStack(ModItems.Sword_2x), "c", "c", "s", 'c', new ItemStack(ModBlock.Cobble_2x), 's', new ItemStack(Items.stick));
+		GameRegistry.addShapedRecipe(new ItemStack(ModItems.Sword_4x), "c", "c", "s", 'c', new ItemStack(ModBlock.Cobble_4x), 's', new ItemStack(Items.stick));
+		GameRegistry.addShapedRecipe(new ItemStack(ModItems.Sword_8x), "c", "c", "s", 'c', new ItemStack(ModBlock.Cobble_8x), 's', new ItemStack(Items.stick));
+		GameRegistry.addShapedRecipe(new ItemStack(ModItems.Sword_16x), "c", "c", "s", 'c', new ItemStack(ModBlock.Cobble_16x), 's', new ItemStack(Items.stick));
+		GameRegistry.addShapedRecipe(new ItemStack(ModItems.Sword_32x), "c", "c", "s", 'c', new ItemStack(ModBlock.Cobble_32x), 's', new ItemStack(Items.stick));
+		GameRegistry.addShapedRecipe(new ItemStack(ModItems.Sword_64x), "c", "c", "s", 'c', new ItemStack(ModBlock.Cobble_64x), 's', new ItemStack(Items.stick));
 		GameRegistry.addShapedRecipe(new ItemStack(ModBlock.Cobble_2x), "cc","cc", 'c', new ItemStack(Blocks.cobblestone));
 		GameRegistry.addShapedRecipe(new ItemStack(ModBlock.Cobble_4x), "cc","cc", 'c', new ItemStack(ModBlock.Cobble_2x));
 		GameRegistry.addShapedRecipe(new ItemStack(ModBlock.Cobble_8x), "cc","cc", 'c', new ItemStack(ModBlock.Cobble_4x));
