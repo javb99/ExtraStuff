@@ -2,4 +2,18 @@ item.extrastuff:ruby.name=Ruby
 item.extrastuff:rubyPickaxe.name=Ruby Pickaxe
 item.extrastuff:rubySpade.name=Ruby Shovel
 
+item.extrastuff:Pickaxe_2x.name=2x Stone pickaxe
+item.extrastuff:Pickaxe_4x.name=4x Stone pickaxe
+item.extrastuff:Pickaxe_8x.name=8x Stone pickaxe
+item.extrastuff:Pickaxe_16x.name=16x Stone pickaxe
+item.extrastuff:Pickaxe_32x.name=32x Stone pickaxe
+item.extrastuff:Pickaxe_64x.name=64x Stone pickaxe
+
 tile.extrastuff:rubstone.name=Rubstone
+tile.extrastuff:Cobble_2x.name=Cobble 2x
+tile.extrastuff:Cobble_4x.name=Cobble 4x
+tile.extrastuff:Cobble_8x.name=Cobble 8x
+tile.extrastuff:Cobble_16x.name=Cobble 16x
+tile.extrastuff:Cobble_32x.name=Cobble 32x
+tile.extrastuff:Cobble_64x.name=Cobble 64x
+ItemGroup.extrastuff:ExtraStuff_tab.name=Extra Stuff

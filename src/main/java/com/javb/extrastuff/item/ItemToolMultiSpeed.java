@@ -13,7 +13,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
+//<<<<<<< HEAD
+import com.javb.extrastuff.creativetab.CreativeTabES;
+//=======
 import com.javb.extrastuff.block.BlockES;
+//>>>>>>> a97776c2580575568011e6d757ab3d208c1919f7
 import com.javb.extrastuff.reference.Reference;
 import com.javb.extrastuff.utility.LogHelper;
 import com.javb.extrastuff.utility.NBTHelper;
@@ -31,6 +35,9 @@ public class ItemToolMultiSpeed extends ItemTool {
 
 	protected ItemToolMultiSpeed(float damageAddition, ToolMaterial material, Set minableBlocks) {
 		super(damageAddition, material, minableBlocks);
+//<<<<<<< HEAD
+		this.setCreativeTab(CreativeTabES.ExtraStuff_tab);
+//=======
 		if (this instanceof ItemPickaxeMultiSpeed)
         {
             this.toolClass = "pickaxe";
@@ -45,6 +52,7 @@ public class ItemToolMultiSpeed extends ItemTool {
             toolClass = "shovel";
         }
 		this.setHarvestLevel(toolClass, material.getHarvestLevel());
+//>>>>>>> a97776c2580575568011e6d757ab3d208c1919f7
 	}
 	
 	@Override

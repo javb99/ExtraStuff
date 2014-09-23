@@ -33,7 +33,7 @@ public class ExtraStuff
     	
     	ModItems.init();
     	ModBlock.init();
-    	Recipes.init();
+    	
     	
     	LogHelper.info("PreInit complete");
     }
@@ -41,8 +41,10 @@ public class ExtraStuff
     @EventHandler
     public void init(FMLInitializationEvent event) {
     	LogHelper.info("Init complete");
-    }
+    	Recipes.init();
     
+    }
+  
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
     	LogHelper.info("PostInit complete");

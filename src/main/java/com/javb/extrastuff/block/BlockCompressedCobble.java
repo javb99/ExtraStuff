@@ -11,16 +11,17 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
-public class BlockES extends Block{
-	public BlockES(Material material) {
-		super(material);
-		
-	}{
-	this.setCreativeTab(CreativeTabES.ExtraStuff_tab);}
-	public BlockES() {
+public class BlockCompressedCobble extends Block{
+	public BlockCompressedCobble(String unlocalizedName) {
 		super(Material.rock);
+		this.setBlockName(unlocalizedName);
+		this.setBlockTextureName(unlocalizedName);
+		this.setCreativeTab(CreativeTabES.ExtraStuff_tab);
 	}
 	
+	private void setUnlocalizedName(String unlocalizedName){
+	}
+
 	@Override
 	public String getUnlocalizedName() {
 		return String.format("tile.%s%s", Reference.MODID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
