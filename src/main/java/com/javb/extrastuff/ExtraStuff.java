@@ -1,7 +1,8 @@
 package com.javb.extrastuff;
 
+import com.javb.extrastuff.client.gui.GuiHandler;
 import com.javb.extrastuff.handler.ConfigurationHandler;
-import com.javb.extrastuff.init.ModBlock;
+import com.javb.extrastuff.init.ModBlocks;
 import com.javb.extrastuff.init.ModItems;
 import com.javb.extrastuff.init.Recipes;
 import com.javb.extrastuff.proxy.IProxy;
@@ -15,6 +16,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 
 @Mod(modid = Reference.MODID, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY_CLASS)
 public class ExtraStuff
@@ -32,14 +34,14 @@ public class ExtraStuff
     	FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
     	
     	ModItems.init();
-    	ModBlock.init();
-    	
+    	ModBlocks.init();
     	
     	LogHelper.info("PreInit complete");
     }
     
     @EventHandler
     public void init(FMLInitializationEvent event) {
+    	NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     	Recipes.init();
     	LogHelper.info("Init complete");
     }

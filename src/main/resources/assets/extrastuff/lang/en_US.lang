@@ -1,5 +1,15 @@
 item.extrastuff:ruby.name=Ruby
+item.extrastuff:rubicCrystal.name=Rubic Crystal
+item.extrastuff:pureRubicCrystal.name=Pure Rubic Crystal
 item.extrastuff:rubyPickaxe.name=Ruby Pickaxe
 item.extrastuff:rubySpade.name=Ruby Shovel
 
 tile.extrastuff:rubstone.name=Rubstone
+tile.extrastuff:rubicInterface.name=Rubic Interface
+tile.extrastuff:rubicInterfaceUsed.name=Rubic Interface(broken)
+tile.extrastuff:oreRuby.name=Ruby Ore
+tile.extrastuff:rubyUpgrader.name=Ruby Upgrader
+tile.extrastuff:rubyCraftingTable.name=Ruby Crafting Table
+tile.rubyUpgrader.name=Ruby Upgrader
+
+container.extrastuff:rubyUpgrader.name=Ruby Upgrader

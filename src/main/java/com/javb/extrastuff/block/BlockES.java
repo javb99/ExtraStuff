@@ -1,5 +1,6 @@
 package com.javb.extrastuff.block;
 
+import com.javb.extrastuff.init.ModCreativeTabs;
 import com.javb.extrastuff.reference.Reference;
 
 import cpw.mods.fml.relauncher.Side;
@@ -11,13 +12,16 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
 public class BlockES extends Block{
-	public BlockES(Material material) {
+	
+	public BlockES(Material material, String name) {
 		super(material);
-		
-	}{
-	this.setCreativeTab(CreativeTabs.tabMisc);}
+		this.setBlockName(name);
+		this.setCreativeTab(ModCreativeTabs.tabRubyStuff);
+	}
+	
 	public BlockES() {
 		super(Material.rock);
+		this.setCreativeTab(ModCreativeTabs.tabRubyStuff);
 	}
 	
 	@Override

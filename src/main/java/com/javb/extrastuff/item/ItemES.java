@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.creativetab.CreativeTabs;
 
+import com.javb.extrastuff.init.ModCreativeTabs;
 import com.javb.extrastuff.reference.Reference;
 
 import cpw.mods.fml.relauncher.Side;
@@ -13,7 +14,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemES extends Item{
 	public ItemES() {
 		super();
-		this.setCreativeTab(CreativeTabs.tabMisc);
+		this.setCreativeTab(ModCreativeTabs.tabRubyStuff);
 	}
 	
 	@Override

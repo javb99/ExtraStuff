@@ -14,6 +14,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 import com.javb.extrastuff.block.BlockES;
+import com.javb.extrastuff.init.ModCreativeTabs;
+import com.javb.extrastuff.reference.Constants;
 import com.javb.extrastuff.reference.Reference;
 import com.javb.extrastuff.utility.LogHelper;
 import com.javb.extrastuff.utility.NBTHelper;
@@ -22,10 +24,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemToolMultiSpeed extends ItemTool {
-	
-	private static final String SPEED_TAG = "speed";
-	private static final String MINED_TAG = "mined";
-	private static final String UPGRADE_TAG = "upgrade";
 	
 	private String toolClass;
 
@@ -45,25 +43,39 @@ public class ItemToolMultiSpeed extends ItemTool {
             toolClass = "shovel";
         }
 		this.setHarvestLevel(toolClass, material.getHarvestLevel());
+		this.setCreativeTab(ModCreativeTabs.tabRubyStuff);
 	}
+	
+	public float getEfficiencyOnProper(ItemStack itemStack) {
+		if (NBTHelper.hasTag(itemStack, Constants.SPEED_TAG)) {
+			int speed = NBTHelper.getInt(itemStack, Constants.SPEED_TAG);
+			return speed;
+		} else {
+			return efficiencyOnProperMaterial;
+		}
+	}
+	
+	@Override
+	public float func_150893_a(ItemStack itemStack, Block p_150893_2_)
+    {
+		
+        return 1.0F;
+    }
 	
 	@Override
 	public float getDigSpeed(ItemStack itemStack, Block block, int metadata) {
 		NBTTagCompound tag = itemStack.getTagCompound();
 		if (ForgeHooks.isToolEffective(itemStack, block, metadata)) {
-			if (NBTHelper.hasTag(itemStack, SPEED_TAG)) {
-				int speed = NBTHelper.getInt(itemStack, SPEED_TAG);
-				return speed;
-			}
+			getEfficiencyOnProper(itemStack);
         }
-		return 1.0f;
+		return super.getDigSpeed(itemStack, block, metadata);
     }
 	
 	@Override
 	public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
-		NBTHelper.setInteger(itemStack, SPEED_TAG, 4);
-		NBTHelper.setInteger(itemStack, MINED_TAG, 0);
-		NBTHelper.setInteger(itemStack, UPGRADE_TAG, 2);
+		NBTHelper.setInteger(itemStack, Constants.SPEED_TAG, 4);
+		NBTHelper.setInteger(itemStack, Constants.MINED_TAG, 0);
+		NBTHelper.setInteger(itemStack, Constants.UPGRADE_TAG, 2);
 		LogHelper.info("pickaxe created");
 	}
 	
@@ -72,18 +84,18 @@ public class ItemToolMultiSpeed extends ItemTool {
     {
 		super.onBlockDestroyed(itemStack, world, block, x, y, z, p_150894_7_);
 
-		int curMined = NBTHelper.getInt(itemStack, MINED_TAG);
-		int curUpgrade = NBTHelper.getInt(itemStack, UPGRADE_TAG);
+		int curMined = NBTHelper.getInt(itemStack, Constants.MINED_TAG);
+		int curUpgrade = NBTHelper.getInt(itemStack, Constants.UPGRADE_TAG);
 		if (curUpgrade <= curMined + 1) {
-			int curSpeed = NBTHelper.getInt(itemStack, SPEED_TAG);
-			NBTHelper.setInteger(itemStack, SPEED_TAG, curSpeed + 4);
-			NBTHelper.setInteger(itemStack, UPGRADE_TAG, curUpgrade * 2);
+			int curSpeed = NBTHelper.getInt(itemStack, Constants.SPEED_TAG);
+			NBTHelper.setInteger(itemStack, Constants.SPEED_TAG, curSpeed + 4);
+			NBTHelper.setInteger(itemStack, Constants.UPGRADE_TAG, curUpgrade * 2);
 		}
 		
 		if (block instanceof BlockES) {
-			NBTHelper.setInteger(itemStack, MINED_TAG, curMined + 8);
+			NBTHelper.setInteger(itemStack, Constants.MINED_TAG, curMined + 8);
 		} else {
-			NBTHelper.setInteger(itemStack, MINED_TAG, curMined + 1);
+			NBTHelper.setInteger(itemStack, Constants.MINED_TAG, curMined + 1);
 		}
         return false;
     }
@@ -92,14 +104,14 @@ public class ItemToolMultiSpeed extends ItemTool {
 	@Override
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean bool) {
 		super.addInformation(itemStack, player, list, bool);
-		int speed = NBTHelper.getInt(itemStack, SPEED_TAG);
-		int mined = NBTHelper.getInt(itemStack, MINED_TAG);
-		int toUpgrade = NBTHelper.getInt(itemStack, UPGRADE_TAG);
+		int speed = NBTHelper.getInt(itemStack, Constants.SPEED_TAG);
+		int mined = NBTHelper.getInt(itemStack, Constants.MINED_TAG);
+		int toUpgrade = NBTHelper.getInt(itemStack, Constants.UPGRADE_TAG);
 		if (speed == 0) {
 			speed = 4;
-			NBTHelper.setInteger(itemStack, SPEED_TAG, speed);
-			NBTHelper.setInteger(itemStack, MINED_TAG, 0);
-			NBTHelper.setInteger(itemStack, UPGRADE_TAG, 2);
+			NBTHelper.setInteger(itemStack, Constants.SPEED_TAG, speed);
+			NBTHelper.setInteger(itemStack, Constants.MINED_TAG, 0);
+			NBTHelper.setInteger(itemStack, Constants.UPGRADE_TAG, 2);
 		}
 		list.add("Speed: " + speed);
 		list.add("Total Mined: " + mined);
