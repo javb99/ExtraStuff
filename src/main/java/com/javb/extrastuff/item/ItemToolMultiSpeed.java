@@ -5,16 +5,23 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Multimap;
 import com.javb.extrastuff.block.BlockES;
 import com.javb.extrastuff.init.ModCreativeTabs;
+import com.javb.extrastuff.item.powered.ESBaseEnergyItem;
 import com.javb.extrastuff.reference.Constants;
 import com.javb.extrastuff.reference.Reference;
 import com.javb.extrastuff.utility.LogHelper;
@@ -23,12 +30,25 @@ import com.javb.extrastuff.utility.NBTHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemToolMultiSpeed extends ItemTool {
+public class ItemToolMultiSpeed extends ESBaseEnergyItem {
 	
 	private String toolClass;
+	private Set minableBlocks;
+    protected float efficiencyOnProperMaterial = 4.0F;
+    /** Damage versus entities. */
+    private float damageVsEntity;
+    /** The material this tool is made from. */
+    protected Item.ToolMaterial toolMaterial;
 
 	protected ItemToolMultiSpeed(float damageAddition, ToolMaterial material, Set minableBlocks) {
-		super(damageAddition, material, minableBlocks);
+		super(100000, 1000, 1000);
+		this.toolMaterial = material;
+        this.minableBlocks = minableBlocks;
+        this.maxStackSize = 1;
+        this.setMaxDamage(material.getMaxUses());
+        this.efficiencyOnProperMaterial = material.getEfficiencyOnProperMaterial();
+        this.damageVsEntity = damageAddition + material.getDamageVsEntity();
+		
 		if (this instanceof ItemPickaxeMultiSpeed)
         {
             this.toolClass = "pickaxe";
@@ -46,33 +66,21 @@ public class ItemToolMultiSpeed extends ItemTool {
 		this.setCreativeTab(ModCreativeTabs.tabRubyStuff);
 	}
 	
-	public float getEfficiencyOnProper(ItemStack itemStack) {
-		if (NBTHelper.hasTag(itemStack, Constants.SPEED_TAG)) {
-			int speed = NBTHelper.getInt(itemStack, Constants.SPEED_TAG);
-			return speed;
-		} else {
-			return efficiencyOnProperMaterial;
-		}
-	}
-	
-	@Override
-	public float func_150893_a(ItemStack itemStack, Block p_150893_2_)
-    {
-		
-        return 1.0F;
-    }
-	
 	@Override
 	public float getDigSpeed(ItemStack itemStack, Block block, int metadata) {
 		NBTTagCompound tag = itemStack.getTagCompound();
 		if (ForgeHooks.isToolEffective(itemStack, block, metadata)) {
-			getEfficiencyOnProper(itemStack);
+			if (NBTHelper.hasTag(itemStack, Constants.SPEED_TAG)) {
+				int speed = NBTHelper.getInt(itemStack, Constants.SPEED_TAG);
+				return speed;
+			}
         }
-		return super.getDigSpeed(itemStack, block, metadata);
+		return 1.0F;
     }
 	
 	@Override
 	public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
+		super.onCreated(itemStack, world, player);
 		NBTHelper.setInteger(itemStack, Constants.SPEED_TAG, 4);
 		NBTHelper.setInteger(itemStack, Constants.MINED_TAG, 0);
 		NBTHelper.setInteger(itemStack, Constants.UPGRADE_TAG, 2);
@@ -80,10 +88,13 @@ public class ItemToolMultiSpeed extends ItemTool {
 	}
 	
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block block, int x, int y, int z, EntityLivingBase p_150894_7_)
-    {
-		super.onBlockDestroyed(itemStack, world, block, x, y, z, p_150894_7_);
+	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block block, int x, int y, int z, EntityLivingBase evb) {
+		super.onBlockDestroyed(itemStack, world, block, x, y, z, evb);
 
+		if ((double) block.getBlockHardness(world, x, y, z) != 0.0D) {
+			this.useEnergy(itemStack, 1, evb);
+		}
+		
 		int curMined = NBTHelper.getInt(itemStack, Constants.MINED_TAG);
 		int curUpgrade = NBTHelper.getInt(itemStack, Constants.UPGRADE_TAG);
 		if (curUpgrade <= curMined + 1) {
@@ -119,26 +130,85 @@ public class ItemToolMultiSpeed extends ItemTool {
 		
 	}
 	
+	public void useEnergy(ItemStack itemStack, int multiplier, EntityLivingBase evb) {
+		this.extractEnergy(itemStack, 100 * multiplier, evb.worldObj.isRemote);
+	}
+	
+	// ItemTool
+
+    /**
+     * Current implementations of this method in child classes do not use the entry argument beside ev. They just raise
+     * the damage on the stack.
+     */
 	@Override
-	public String getUnlocalizedName() {
-		return String.format("item.%s%s", Reference.MODID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
-	}
-	
-	@Override
-	public String getUnlocalizedName(ItemStack itemStack) {
-		return this.getUnlocalizedName();	
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) {
-		itemIcon = iconRegister.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf(".") + 1));
-	}
-	
-	
-	protected String getUnwrappedUnlocalizedName(String unlocalizedName) {
-		return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);
-	}
+    public boolean hitEntity(ItemStack itemStack, EntityLivingBase evb1, EntityLivingBase evb2) {
+        this.useEnergy(itemStack, 2, evb2);
+        return true;
+    }
+
+    /**
+     * Returns True is the item is renderer in full 3D when hold.
+     */
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean isFull3D() {
+        return true;
+    }
+
+    public Item.ToolMaterial func_150913_i() {
+        return this.toolMaterial;
+    }
+
+    /**
+     * Return the enchantability factor of the item, most of the time is based on material.
+     */
+    public int getItemEnchantability() {
+        return this.toolMaterial.getEnchantability();
+    }
+
+    /**
+     * Return the name for this tool's material.
+     */
+    public String getToolMaterialName() {
+        return this.toolMaterial.toString();
+    }
+
+    /**
+     * Return whether this item is repairable in an anvil.
+     */
+    public boolean getIsRepairable(ItemStack p_82789_1_, ItemStack p_82789_2_) {
+        //return this.toolMaterial.func_150995_f() == p_82789_2_.getItem() ? true : super.getIsRepairable(p_82789_1_, p_82789_2_);
+    	return false;
+    }
+
+    /**
+     * Gets a map of item attribute modifiers, used by ItemSword to increase hit damage.
+     */
+    public Multimap getItemAttributeModifiers() {
+        Multimap multimap = super.getItemAttributeModifiers();
+        multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Tool modifier", (double)this.damageVsEntity, 0));
+        return multimap;
+    }
+
+    /*===================================== FORGE START =================================*/
+    @Override
+    public int getHarvestLevel(ItemStack stack, String toolClass) {
+        int level = super.getHarvestLevel(stack, toolClass);
+        if (level == -1 && toolClass != null && toolClass.equals(this.toolClass))
+        {
+            return this.toolMaterial.getHarvestLevel();
+        }
+        else
+        {
+            return level;
+        }
+    }
+
+    @Override
+    public Set<String> getToolClasses(ItemStack stack) {
+        return toolClass != null ? ImmutableSet.of(toolClass) : super.getToolClasses(stack);
+    }
+    /*===================================== FORGE END =================================*/
 	
 }
 

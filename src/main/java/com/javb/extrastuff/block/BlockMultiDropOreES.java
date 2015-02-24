@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 public class BlockMultiDropOreES extends BlockES {
 	public BlockMultiDropOreES(String name) {
 		super(Material.rock, name);
-		this.setHardness(super.blockHardness + 2);
+		this.setHardness(0.7F);
 	}
 
 	public Item getItemDropped(int p_149650_1_, Random rand, int p_149650_3_) {

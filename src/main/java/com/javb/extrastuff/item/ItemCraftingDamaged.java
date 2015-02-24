@@ -5,7 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ItemCraftingDamaged extends ItemES{
+public class ItemCraftingDamaged extends ESBaseItem{
 
 	public ItemCraftingDamaged(String unlocalizedName) {
 		super();

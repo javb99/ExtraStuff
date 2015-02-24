@@ -11,10 +11,15 @@ import com.javb.extrastuff.reference.Reference;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemES extends Item{
-	public ItemES() {
+public class ESBaseItem extends Item{
+	public ESBaseItem() {
 		super();
 		this.setCreativeTab(ModCreativeTabs.tabRubyStuff);
+	}
+	
+	public ESBaseItem(String name) {
+		this();
+		this.setUnlocalizedName(name);
 	}
 	
 	@Override

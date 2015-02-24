@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.100"
+version = "1.101"
 group= "com.javb.extrastuff" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "extrastuff"
 

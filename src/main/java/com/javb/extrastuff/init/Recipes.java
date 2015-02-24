@@ -19,9 +19,10 @@ public class Recipes {
 		GameRegistry.addShapedRecipe(new ItemStack(ModItems.rubyPickaxe), "RRR", " S ", " S ", 'R', new ItemStack(ModItems.ruby), 'S', new ItemStack(Items.stick));// Ruby Pickaxe
 		GameRegistry.addShapedRecipe(new ItemStack(ModItems.rubySpade), " R ", " S ", " S ", 'R', new ItemStack(ModItems.ruby), 'S', new ItemStack(Items.stick));// Ruby Pickaxe
 		// blocks
-		GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.rubyCraftingTable), Blocks.crafting_table, rubicCrystal); // Ruby Crafting Table
+		GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.rubyCraftingTable), "RcR","RTR","RRR", 'R', new ItemStack(ModBlocks.rubstone), 'c', rubicCrystal, 'T', new ItemStack(Blocks.crafting_table)); // Ruby Crafting Table
 		GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.rubstone), "RR","RR", 'R', new ItemStack(ModItems.ruby));// Rubstone
 		GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.rubicInterface), "rrr","rbr","rrr", 'r', new ItemStack(ModItems.ruby), 'b', new ItemStack(Blocks.stone_button));// Rubic Interface
+		GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.rubicInterface), "r r", " i ", "r r", 'r', new ItemStack(ModItems.ruby), 'i', new ItemStack(ModBlocks.rubicInterfaceUsed)); // Rubic Interface
 		GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.rubyUpgrader), "RRR","RAR","RRR", 'R', new ItemStack(ModBlocks.rubstone), 'A', new ItemStack(Blocks.anvil));// Ruby Upgrader
 	}
 }
